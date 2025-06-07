@@ -355,7 +355,7 @@ void Miot::process_message_(char *msg) {
   queue_net_change_command(false);
 
   if (cmd == "get_down") {
-    if (command_queue_.empty()) {
+    if (command_queue_.empty() || model_.empty()) {
       send_reply_("down none");
     } else {
       const std::string &next_cmd = command_queue_.front();
