@@ -52,6 +52,10 @@ uart:
   rx_pin: GPIO16
   baud_rate: 115200
 
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
 miot:
   id: miot_main
 
@@ -96,7 +100,7 @@ select:
   - platform: "miot"
     miot_siid: 5
     miot_piid: 2
-    name: "Display brightness"
+    name: "Display Brightness"
     icon: mdi:brightness-6
     entity_category: config
     options:
@@ -104,52 +108,88 @@ select:
       1: "Glimmer"
       2: "Brightest"
 
+number:
+  - platform: "miot"
+    miot_siid: 2
+    miot_piid: 6
+    name: "Target Humidity"
+    icon: mdi:water-percent
+    unit_of_measurement: "%"
+    min_value: 30
+    max_value: 80
+    step: 1
+
 sensor:
   - platform: "miot"
     miot_siid: 2
     miot_piid: 2
     name: "Device Fault Code"
-    icon: mdi:fan-alert
+    icon: mdi:alert-circle-outline
     entity_category: diagnostic
+
   - platform: "miot"
     miot_siid: 3
     miot_piid: 7
     name: "Temperature"
     unit_of_measurement: "°C"
     device_class: temperature
-    state_class: "measurement"
+    state_class: measurement
     icon: mdi:thermometer
+
   - platform: "miot"
     miot_siid: 3
     miot_piid: 9
     name: "Relative Humidity"
     unit_of_measurement: "%"
     device_class: humidity
-    state_class: "measurement"
+    state_class: measurement
     icon: mdi:water-percent
+
   - platform: "miot"
     miot_siid: 2
     miot_piid: 7
     name: "Water Level"
     unit_of_measurement: "%"
-    state_class: "measurement"
+    state_class: measurement
     icon: mdi:water-percent
     filters:
       - clamp:
           min_value: 0
           max_value: 100
           ignore_out_of_range: true
+
   - platform: "miot"
     miot_siid: 2
     miot_piid: 11
     name: "Motor Speed"
     unit_of_measurement: "rpm"
     icon: mdi:fan
+
   - platform: "miot"
     miot_siid: 7
     miot_piid: 1
     name: "Actual Speed"
     unit_of_measurement: "rpm"
     icon: mdi:fan
-  - platform: internal_temperature
-    name: "MCU Temperature"
+
+  - platform: "miot"
+    miot_siid: 2
+    miot_piid: 9
+    name: "Total Use Time"
+    unit_of_measurement: "h"
+    icon: mdi:timer-outline
+    entity_category: diagnostic
+    state_class: total_increasing
+    filters:
+      - multiply: 0.0002777778
+
+  - platform: "miot"
+    miot_siid: 7
+    miot_piid: 3
+    name: "Power Time"
+    unit_of_measurement: "h"
+    icon: mdi:timer
+    state_class: measurement
+    entity_category: diagnostic
+    filters:
+      - multiply: 0.0002777778
