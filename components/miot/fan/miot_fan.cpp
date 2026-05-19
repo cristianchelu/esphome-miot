@@ -72,6 +72,11 @@ void MiotFan::setup() {
       }
       this->publish_state();
     });
+
+  std::vector<const char *> modes;
+  for (auto const &iter : preset_modes_)
+    modes.push_back(iter.second);
+  this->set_supported_preset_modes(modes);
 }
 
 void MiotFan::dump_config() {
@@ -106,10 +111,7 @@ fan::FanTraits MiotFan::get_traits() {
                         this->direction_siid_ != 0 && this->direction_piid_ != 0,
                         (this->speed_max_ - this->speed_min_) / this->speed_step_ + 1);
 
-  std::vector<const char *> modes;
-  for (auto const &iter : preset_modes_)
-    modes.push_back(iter.second);
-  traits.set_supported_preset_modes(modes);
+  this->wire_preset_modes_(traits);
 
   return traits;
 }
